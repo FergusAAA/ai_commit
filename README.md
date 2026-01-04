@@ -103,13 +103,13 @@ To automatically generate a commit message every time you run `git commit`, you 
 2.  **Add the following content to the file.** Make sure `ai_commit` is in your `PATH`.
     ```bash
     #!/bin/sh
-
-    # Only run if it's a regular commit (not a merge, rebase, etc.)
-    if [ -z "$2" ] || [ "$2" = "message" ]; then
-        # This assumes `ai_commit` is in your PATH.
-        # If not, provide the full path to the executable.
-        MSG=$(ai_commit)
-        echo "$MSG" > "$1"
+    
+    COMMIT_MSG_FILE=$1
+    COMMIT_SOURCE=$2
+    
+    # Only run if the commit is not a merge, squash, or fixup
+    if [ -z "$COMMIT_SOURCE" ]; then
+      ai_commit >"$COMMIT_MSG_FILE"
     fi
     ```
 
