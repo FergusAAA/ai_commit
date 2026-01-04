@@ -2,8 +2,6 @@ pub mod ai_commit;
 pub mod cli;
 pub mod config;
 
-use std::fs;
-use std::io::Write;
 use std::process::Command;
 
 use crate::cli::{Cli, ConfigCmd};
@@ -42,18 +40,7 @@ pub async fn run_generate(args: Cli, config: Config) {
         .await
     {
         Ok(commit_message) => {
-            let final_message = open_in_vim(&commit_message);
-            if !final_message.trim().is_empty() {
-                Command::new("git")
-                    .arg("commit")
-                    .arg("-m")
-                    .arg(&final_message)
-                    .status()
-                    .expect("Failed to execute git commit");
-                println!("Commit successful.");
-            } else {
-                println!("Commit aborted because the message is empty.");
-            }
+            println!("{}", commit_message);
         }
         Err(e) => {
             eprintln!("Error generating commit message:\n{}", e);
@@ -69,24 +56,6 @@ fn get_git_diff() -> String {
         .expect("failed to execute git diff");
 
     String::from_utf8_lossy(&output.stdout).to_string()
-}
-
-fn open_in_vim(commit_message: &str) -> String {
-    let mut temp_file = tempfile::Builder::new()
-        .prefix("COMMIT_MSG_")
-        .suffix(".txt")
-        .tempfile()
-        .expect("Failed to create temporary file");
-
-    write!(temp_file, "{}", commit_message).expect("Failed to write to temporary file");
-    let temp_path = temp_file.path().to_str().unwrap();
-
-    Command::new("vim")
-        .arg(temp_path)
-        .status()
-        .expect("Failed to open Vim");
-
-    fs::read_to_string(temp_path).expect("Failed to read from temporary file")
 }
 
 pub fn handle_config_command(cmd: ConfigCmd, mut config: Config) {
