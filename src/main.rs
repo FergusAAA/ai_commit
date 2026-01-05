@@ -1,6 +1,6 @@
 use ai_commit::cli::{Cli, SubCommand};
 use ai_commit::config::load_config;
-use ai_commit::{handle_config_command, run_generate};
+use ai_commit::{handle_config_command, run_generate_commit};
 use clap::Parser;
 
 #[tokio::main]
@@ -13,7 +13,7 @@ async fn main() {
             handle_config_command(config_args.command, config);
         }
         None => {
-            run_generate(cli, config).await;
+            run_generate_commit(cli, config).await;
         }
     }
 }

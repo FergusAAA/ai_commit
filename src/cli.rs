@@ -31,6 +31,9 @@ pub struct Cli {
     )]
     pub model: Option<String>,
 
+    #[clap(short = 'm', hide = true)]
+    pub msg: bool,
+
     #[clap(subcommand)]
     pub command: Option<SubCommand>,
 }
