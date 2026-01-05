@@ -109,7 +109,7 @@ To automatically generate a commit message every time you run `git commit`, you 
     
     # Only run if the commit is not a merge, squash, or fixup
     if [ -z "$COMMIT_SOURCE" ]; then
-      ai_commit >"$COMMIT_MSG_FILE"
+      ai_commit -m >"$COMMIT_MSG_FILE"
     fi
     ```
 
