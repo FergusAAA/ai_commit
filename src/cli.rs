@@ -34,6 +34,9 @@ pub struct Cli {
     #[clap(short = 'm', hide = true)]
     pub msg: bool,
 
+    #[clap(long, hide = true, value_name = "SHELL", min_values = 0, max_values = 1)]
+    pub gen_completion: Option<Option<String>>,
+
     #[clap(subcommand)]
     pub command: Option<SubCommand>,
 }
